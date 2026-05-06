@@ -3,18 +3,24 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import RandomPokemon from './components/RandomPokemon'
 
 function App() {
   // let someReturnedValue = useSomeFunction(someArguments);
   // let [getter, setter] = useState(initialValue);
   const [count, setCount] = useState(0)
   // let {username, password, jwt} = await fetchFromApi();
-  const [favouriteFruits, setFaveFruits] = useState([]);
-  const [favouritePokemon, setFavouritePokemon] = useState({});
+  // const [favouriteFruits, setFaveFruits] = useState([]);
+  // const [favouritePokemon, setFavouritePokemon] = useState({});
+
+  // TypeScript example; type declaration or type name inside angle brackets next to useState
+  // const [favouritePokemon, setFavePokemon] = useState<{name: String, id: Number}>({name: "", id: 0});
+
 
   return (
     <>
       <section id="center">
+        <RandomPokemon />
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
