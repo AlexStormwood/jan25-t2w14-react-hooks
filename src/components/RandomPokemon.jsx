@@ -1,11 +1,27 @@
 import { useEffect, useState } from "react"
+import "../styles/RandomPokemon.css";
+import { useLocalStorage } from "react-use";
 
 export default function RandomPokemon(){
 	const [pokemonName, setPokemonName] = useState("")
 	const [imageUrl, setImageUrl] = useState(null);
 
+	const [pokemonNameLs, setPokemonNameLs, removePokemonNameLs] = useLocalStorage("pokemonName","");
+	const [imageUrlLs, setImageUrlLs, removeImageUrlLs] = useLocalStorage("imageUrl","");
+
 	// useEffect(callback, dependencyArray);
 	useEffect(() => {
+
+		// Check localstorage ASAP so that the rest of our code can use it!
+		// If localstorage has values, apply those values to state!!!
+		if (pokemonNameLs){
+			// eslint-disable-next-line react-hooks/set-state-in-effect
+			setPokemonName(pokemonNameLs);
+		}
+		if (imageUrlLs){
+			setImageUrl(imageUrlLs);
+		}
+
 		
 		console.log("Hello from RandomPokemon in the componentDidMount useEffect")
 
@@ -26,7 +42,12 @@ export default function RandomPokemon(){
 			setPokemonName(responseBody.name);
 			setImageUrl(responseBody.sprites.front_default);
 		}
-		getRandomPokemon();
+		if (pokemonNameLs || imageUrlLs){
+			console.log("Loading Pokemon data from localStorage!");
+		} else {
+			getRandomPokemon();
+		}
+		
 
 
 
@@ -36,13 +57,26 @@ export default function RandomPokemon(){
 		})
 
 		// Empty dependency array = componentDidMount
+		// Disable this linting rule specifically because this is componentDidMount
+		// We do NOT care if pokemonNameLs or imageUrlLs change afterwards,
+		// the componentDidMount just runs once and that's it
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
 		console.log("Pokemon name changed! It is now: " + pokemonName);
+
+		if (pokemonName){
+			setPokemonNameLs(pokemonName);
+		}
+		if (imageUrl){
+			setImageUrlLs(imageUrl);
+		}
+		
+
 		// Putting a variable into the dependency array
 		// turns this useEffect into componentDidUpdate
-	}, [pokemonName])
+	}, [pokemonName, imageUrl, setPokemonNameLs, setImageUrlLs])
 
 
 
